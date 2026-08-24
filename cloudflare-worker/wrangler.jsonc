@@ -1,0 +1,41 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "zkteco-attendance-gateway",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "ADMIN_API_KEY": "__MUST_BE_REPLACED_BY_A_WRANGLER_SECRET__"
+  },
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "zkteco-attendance",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "queues": {
+    "producers": [{ "binding": "ATTENDANCE_QUEUE", "queue": "zkteco-attendance-events" }],
+    "consumers": [{ "queue": "zkteco-attendance-events", "max_batch_size": 50, "max_retries": 3 }]
+  },
+  "env": {
+    "staging": {
+      "name": "zkteco-attendance-gateway-staging",
+      "d1_databases": [{ "binding": "DB", "database_name": "zkteco-attendance-staging", "database_id": "REPLACE_WITH_STAGING_D1_DATABASE_ID", "migrations_dir": "migrations" }],
+      "queues": {
+        "producers": [{ "binding": "ATTENDANCE_QUEUE", "queue": "zkteco-attendance-events-staging" }],
+        "consumers": [{ "queue": "zkteco-attendance-events-staging", "max_batch_size": 50, "max_retries": 3 }]
+      }
+    },
+    "production": {
+      "name": "zkteco-attendance-gateway-production",
+      "d1_databases": [{ "binding": "DB", "database_name": "zkteco-attendance", "database_id": "REPLACE_WITH_PRODUCTION_D1_DATABASE_ID", "migrations_dir": "migrations" }],
+      "queues": {
+        "producers": [{ "binding": "ATTENDANCE_QUEUE", "queue": "zkteco-attendance-events" }],
+        "consumers": [{ "queue": "zkteco-attendance-events", "max_batch_size": 50, "max_retries": 3 }]
+      }
+    }
+  }
+}
