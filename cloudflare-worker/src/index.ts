@@ -135,7 +135,7 @@ function parseAttendance(payload: string): { valid: AttendanceRecord[]; invalid:
 async function isAdmin(request: Request, env: Env): Promise<boolean> {
   const received = request.headers.get('X-Attendance-Key') ?? new URL(request.url).searchParams.get('api_key') ?? '';
   const configured = env.ADMIN_API_KEY ?? '';
-  return received !== '' && !configured.startsWith('__MUST_') && await secureEqual(received, configured);
+  return received !== '' && configured !== '' && await secureEqual(received, configured);
 }
 
 async function secureEqual(left: string, right: string): Promise<boolean> {
