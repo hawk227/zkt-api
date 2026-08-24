@@ -28,6 +28,7 @@
     },
     "production": {
       "name": "zkteco-attendance-gateway-production",
+      "routes": [{ "pattern": "zkt.astromi.xyz", "custom_domain": true }],
       "d1_databases": [{ "binding": "DB", "database_name": "zkteco-attendance", "database_id": "2bcc28fa-6959-488d-a946-e356e485cedc", "migrations_dir": "migrations" }],
       "queues": {
         "producers": [{ "binding": "ATTENDANCE_QUEUE", "queue": "zkteco-attendance-events" }],
